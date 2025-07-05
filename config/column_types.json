@@ -1,0 +1,12 @@
+{
+    "mary": "TABULAR_NUMERIC_AUTO",
+    "david": "TABULAR_NUMERIC_AUTO",
+    "jacob": "TABULAR_NUMERIC_AUTO",
+    "emily": "TABULAR_CATEGORICAL",       
+    "alice": "TABULAR_CATEGORICAL",
+    "lucas": "TABULAR_NUMERIC_AUTO",
+    "james": "TABULAR_NUMERIC_AUTO",
+    "mike": "TABULAR_NUMERIC_AUTO",
+    "sarah": "TABULAR_NUMERIC_AUTO",
+    "john": "TABULAR_CATEGORICAL"
+}  

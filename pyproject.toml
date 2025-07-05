@@ -1,0 +1,100 @@
+[project]
+name = "mostlyai-engine-2"
+version = "1.4.3"
+description = "Synthetic Data Engine"
+authors = [{ name = "MOSTLY AI", email = "dev@mostly.ai" }]
+requires-python = ">=3.10"
+readme = "README.md"
+license = "Apache-2.0"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Telecommunications Industry",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "setuptools>=77.0.3",  # similar to vllm 0.8.5.post1
+    "numpy>=1.26.3",
+    "pandas~=2.2.0",
+    "pyarrow>=16.0.0",
+    "joblib>=1.4.2",
+    "psutil>=5.9.5,<6",  # upgrade when colab psutil is updated
+    "tokenizers>=0.21.0",
+    "transformers>=4.51.0",
+    "datasets>=3.0.0",
+    "accelerate>=1.5.0",
+    "peft>=0.12.0",
+    "huggingface-hub[hf-xet]>=0.30.2",
+    "opacus>=1.5.2",  # switch to 1.5.4 (once released) to allow numpy 2
+    "xgrammar>=0.1.18",  # for vllm 0.8.5.post1 compatibility
+    "json-repair>=0.30.0",
+    "torch>=2.6.0,<2.6.1",
+    "torchaudio>=2.6.0,<2.6.1",  # for vllm 0.8.5.post1 compatibility
+    "torchvision>=0.21.0,<0.21.1"  # for vllm 0.8.5.post1 compatibility
+]
+
+[project.optional-dependencies]
+gpu = [
+    "bitsandbytes==0.42.0; sys_platform == 'darwin'",
+    "bitsandbytes>=0.45.5; sys_platform == 'linux'",
+    "vllm==0.8.5.post1; sys_platform == 'linux' or sys_platform == 'darwin'",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.11",  # sync'ed with .pre-commit-config
+    "pre-commit>=4.0",
+    "twine>=6.1",
+    "ipykernel>=6.25",
+]
+docs = [
+    "mkdocs>=1.6",
+    "mkdocstrings[crystal, python]>=0.29",
+    "mkdocs-material>=9.0",
+    "mkdocs-llmstxt>=0.2",
+    "griffe>=1.0",
+    "pymdown-extensions>=10.0",
+    "griffe-fieldz>=0.2",
+    "black>=25.0",
+]
+
+[project.urls]
+homepage = "https://github.com/mostly-ai/mostlyai-engine"
+repository = "https://github.com/mostly-ai/mostlyai-engine"
+documentation = "https://mostly-ai.github.io/mostlyai-engine/"
+
+[tool.uv]
+default-groups = ["dev", "docs"]
+
+[tool.hatch.build.targets.sdist]
+include = ["mostlyai/engine"]
+
+[tool.hatch.build.targets.wheel]
+include = ["mostlyai/engine"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["I"]

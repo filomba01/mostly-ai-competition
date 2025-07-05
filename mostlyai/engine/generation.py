@@ -1,0 +1,129 @@
+# Copyright 2025 MOSTLY AI
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from pathlib import Path
+
+import pandas as pd
+
+from mostlyai.engine._common import ProgressCallback
+from mostlyai.engine._workspace import resolve_model_type
+from mostlyai.engine.domain import (
+    FairnessConfig,
+    ImputationConfig,
+    ModelType,
+    RareCategoryReplacementMethod,
+    RebalancingConfig,
+)
+
+
+def generate(
+    *,
+    ctx_data: pd.DataFrame | None = None,
+    seed_data: pd.DataFrame | None = None,
+    sample_size: int | None = None,
+    batch_size: int | None = None,
+    sampling_temperature: float = 1.0,
+    sampling_top_p: float = 1.0,
+    device: str | None = None,
+    rare_category_replacement_method: RareCategoryReplacementMethod | str = RareCategoryReplacementMethod.constant,
+    rebalancing: RebalancingConfig | dict | None = None,
+    imputation: ImputationConfig | dict | None = None,
+    fairness: FairnessConfig | dict | None = None,
+    workspace_dir: str | Path = "engine-ws",
+    update_progress: ProgressCallback | None = None,
+    embedding_lower_bound: int = 10,
+    embedding_scale_factor: float = 2.8,
+    embedding_exponent: float = 0.23,
+    dropout_rate_history: float = 0.25,
+    layer_size_history: list[int] = [16],
+    dropout_rate_context: float = 0.25,
+    layer_size_flat_context: list[int] = [16],
+    layer_size_sequential_context: list[int] = [16],
+    dropout_rate_regressor: float = 0.25,
+    layer_size_regressor: list[int] = [16],
+    column_embedding_lower_bound: int = 16,
+) -> None:
+    """
+    Generates synthetic data from a trained model.
+
+    Creates the following folder structure within the `workspace_dir`:
+
+    - `SyntheticData`: Generated synthetic data, stored as parquet files.
+
+    Args:
+        ctx_data: Context data to be used for generation.
+        seed_data: Seed data to condition generation on fixed target columns.
+        sample_size: Number of samples to generate. Defaults to number of original samples.
+        batch_size: Batch size for generation. If None, determined automatically.
+        sampling_temperature: Sampling temperature. Higher values increase randomness.
+        sampling_top_p: Nucleus sampling probability threshold.
+        device: Device to run generation on ('cuda' or 'cpu'). Defaults to 'cuda' if available, else 'cpu'.
+        rare_category_replacement_method: Method for handling rare categories. Only applicable for tabular models.
+        rebalancing: Configuration for rebalancing column distributions. Only applicable for tabular models.
+        imputation: List of columns to impute missing values. Only applicable for tabular models.
+        fairness: Configuration for fairness constraints. Only applicable for tabular models.
+        workspace_dir: Directory path for workspace.
+        update_progress: Callback for progress updates.
+    """
+    model_type = resolve_model_type(workspace_dir)
+    if model_type == ModelType.tabular:
+        from mostlyai.engine._tabular.generation import generate as generate_tabular
+
+        return generate_tabular(
+            ctx_data=ctx_data,
+            seed_data=seed_data,
+            sample_size=sample_size,
+            batch_size=batch_size,
+            sampling_temperature=sampling_temperature,
+            sampling_top_p=sampling_top_p,
+            rare_category_replacement_method=rare_category_replacement_method,
+            rebalancing=rebalancing,
+            imputation=imputation,
+            fairness=fairness,
+            device=device,
+            workspace_dir=workspace_dir,
+            update_progress=update_progress,
+            embedding_lower_bound=embedding_lower_bound,
+            embedding_scale_factor=embedding_scale_factor,
+            embedding_exponent=embedding_exponent,
+            dropout_rate_history=dropout_rate_history,
+            layer_size_history=layer_size_history,
+            dropout_rate_context=dropout_rate_context,
+            layer_size_flat_context=layer_size_flat_context,
+            layer_size_sequential_context=layer_size_sequential_context,
+            dropout_rate_regressor=dropout_rate_regressor,
+            layer_size_regressor=layer_size_regressor,
+            column_embedding_lower_bound=column_embedding_lower_bound,
+        )
+    else:
+        from mostlyai.engine._language.generation import generate as generate_language
+
+        if imputation is not None:
+            raise ValueError("imputation is not supported for language models")
+        if fairness is not None:
+            raise ValueError("fairness is not supported for language models")
+        if rebalancing is not None:
+            raise ValueError("rebalancing is not supported for language models")
+        return generate_language(
+            ctx_data=ctx_data,
+            seed_data=seed_data,
+            sample_size=sample_size,
+            batch_size=batch_size,
+            sampling_temperature=sampling_temperature,
+            sampling_top_p=sampling_top_p,
+            rare_category_replacement_method=rare_category_replacement_method,
+            device=device,
+            workspace_dir=workspace_dir,
+            update_progress=update_progress,
+        )
