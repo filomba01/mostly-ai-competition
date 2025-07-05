@@ -101,7 +101,6 @@ After successful execution, the following files are generated:
 {workspace}/
 ├── SyntheticData/          # Main synthetic dataset (Parquet format)
 ├── synthetic_data_{name}.csv  # Competition-ready CSV output
-├── results_{name}.json     # Detailed metrics and parameters
 └── ModelStore/            # Trained model artifacts
 ```
 
