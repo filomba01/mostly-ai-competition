@@ -19,7 +19,7 @@ This repository contains an optimized synthetic data generation solution for bot
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd mostlyai-engine-2
+cd mostly-ai-competition
 
 # Install dependencies
 pip install -r requirements.txt
