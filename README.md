@@ -51,12 +51,9 @@ python run_best_config.py \
     --workspace /data/workspace_sequential \
     --name sequential_submission
 ```
+In the sequential case, the selected column configuration is saved in the `config/column_types.json` file and loaded automatically. If the column names differ from the training data, they must be updated in the file.
 
-
-
-In the sequential case, the selected column configuration is saved in the `config/column_types.json` file and loaded automatically if the column names are not the same, those must be updated in the file.
-
-Consider that the input and output directory /data is referred to the one mounted in the container, if you are running without the container, you need to change the path to the input and output files.
+Consider that the input and output directory /data is referred to as the one mounted in the container; if you are running without the container, you need to change the path to the input and output files.
 
 By default, the run will remove the workspace directory if already exists a previous one, consider to save the results in a different directory every run.
 
@@ -95,7 +92,6 @@ After successful execution, the following files are generated:
 {workspace}/
 ├── SyntheticData/          # Main synthetic dataset (Parquet format)
 ├── synthetic_data_{name}.csv  # Competition-ready CSV output
-├── results_{name}.json     # Detailed metrics and parameters
 └── ModelStore/            # Trained model artifacts
 ```
 
