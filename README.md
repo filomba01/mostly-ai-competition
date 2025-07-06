@@ -54,11 +54,11 @@ python run_best_config.py \
 
 
 
->In the sequential case, the selected column configuration is saved in the `config/column_types.json` file and loaded automatically if the column names are not the same, those must be updated in the file.
+In the sequential case, the selected column configuration is saved in the `config/column_types.json` file and loaded automatically if the column names are not the same, those must be updated in the file.
 
->Consider that the input and output directory /data is referred to the one mounted in the container, if you are running without the container, you need to change the path to the input and output files.
+Consider that the input and output directory /data is referred to the one mounted in the container, if you are running without the container, you need to change the path to the input and output files.
 
-> By default, the run will remove the workspace directory if already exists a previous one, consider to save the results in a different directory every run.
+By default, the run will remove the workspace directory if already exists a previous one, consider to save the results in a different directory every run.
 
 ### Command Line Arguments
 
