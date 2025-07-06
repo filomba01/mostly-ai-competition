@@ -62,9 +62,9 @@ python run_best_config.py \
     --workspace /data/workspace_sequential \
     --name sequential_submission
 ```
-In the sequential case, the selected column configuration is saved in the `config/column_types.json` file and loaded automatically if the column names are not the same, those must be updated in the file.
+In the sequential case, the selected column configuration is saved in the `config/column_types.json` file and loaded automatically. If the column names differ from the training data, they must be updated in the file.
 
-Consider that the input and output directory /data is referred to the one mounted in the container, if you are running without the container, you need to change the path to the input and output files.
+Consider that the input and output directory /data is referred to as the one mounted in the container; if you are running without the container, you need to change the path to the input and output files.
 
 ### Command Line Arguments
 
